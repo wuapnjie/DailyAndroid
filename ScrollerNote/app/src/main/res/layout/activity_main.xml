@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.xiaopo.flying.scrollernote.MainActivity"
+    >
+  <com.xiaopo.flying.scrollernote.PagerLinearLayout
+      android:background="@color/colorPrimary"
+      android:id="@+id/pager_linear_layout"
+      android:layout_width="match_parent"
+      android:layout_height="300dp"
+      >
+
+  </com.xiaopo.flying.scrollernote.PagerLinearLayout>
+
+</FrameLayout>
