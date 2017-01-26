@@ -98,10 +98,6 @@ public class PagerLinearLayout extends LinearLayout {
     return super.onInterceptTouchEvent(event);
   }
 
-  @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-    super.onSizeChanged(w, h, oldw, oldh);
-  }
-
   @Override public boolean onTouchEvent(MotionEvent event) {
     if (adapter == null) return super.onTouchEvent(event);
     velocityTracker.addMovement(event);
@@ -344,6 +340,7 @@ public class PagerLinearLayout extends LinearLayout {
   }
 
   public void setAdapter(Adapter adapter) {
+    if (adapter==null) return;
     this.adapter = adapter;
     switch (mode) {
       case MODE_SCROLL:
@@ -353,6 +350,8 @@ public class PagerLinearLayout extends LinearLayout {
         currentHeight = maxHeight;
         break;
     }
+
+    removeAllViews();
 
     for (int i = 0; i < adapter.getItemCount(); i++) {
       View view = adapter.createView(this);

@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context="com.xiaopo.flying.scrollernote.MainActivity"
     >
+  <LinearLayout
+      android:background="@color/colorAccent"
+      android:orientation="vertical"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      >
+
+  </LinearLayout>
+
   <com.xiaopo.flying.scrollernote.PagerLinearLayout
       android:background="@color/colorPrimary"
       android:id="@+id/pager_linear_layout"
