@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -71,8 +72,14 @@ public class PagerLinearLayout extends LinearLayout {
 
   @Override protected void onLayout(boolean changed, int l, int t, int r, int b) {
     super.onLayout(changed, l, t, r, b);
-    leftBorder = getChildAt(0).getLeft();
-    rightBorder = getChildAt(getChildCount() - 1).getRight();
+    if (getChildCount() != 0) {
+      leftBorder = getChildAt(0).getLeft();
+      rightBorder = getChildAt(getChildCount() - 1).getRight();
+    }
+  }
+
+  @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    super.onSizeChanged(w, h, oldw, oldh);
   }
 
   @Override public boolean onInterceptTouchEvent(MotionEvent event) {
@@ -197,6 +204,7 @@ public class PagerLinearLayout extends LinearLayout {
   }
 
   private void quickScaleLayout(int dstHeight, final int dstMode) {
+    Log.d(TAG, "quickScaleLayout: dstHeight-->" + dstHeight);
     ValueAnimator animator = ValueAnimator.ofInt(currentHeight, dstHeight);
     animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
       @Override public void onAnimationUpdate(ValueAnimator animation) {
@@ -224,17 +232,17 @@ public class PagerLinearLayout extends LinearLayout {
 
   private void scaleLayout(int scaledSize) {
     for (int i = 0; i < getChildCount(); i++) {
-      View v = getChildAt(i);
-      ViewGroup.LayoutParams params = v.getLayoutParams();
+      View view = getChildAt(i);
+      ViewGroup.LayoutParams params = view.getLayoutParams();
       params.height = scaledSize;
       params.width = scaledSize;
 
       if (i == 0) {
-        v.setPadding(currentHeight / 20, 0, currentHeight / 40, 0);
+        view.setPadding(currentHeight / 15, 0, currentHeight / 30, 0);
       } else if (i == getChildCount()) {
-        v.setPadding(currentHeight / 40, 0, currentHeight / 20, 0);
+        view.setPadding(currentHeight / 30, 0, currentHeight / 15, 0);
       } else {
-        v.setPadding(currentHeight / 40, 0, currentHeight / 40, 0);
+        view.setPadding(currentHeight / 30, 0, currentHeight / 30, 0);
       }
     }
     ViewGroup.LayoutParams layoutParams = getLayoutParams();
@@ -340,7 +348,7 @@ public class PagerLinearLayout extends LinearLayout {
   }
 
   public void setAdapter(Adapter adapter) {
-    if (adapter==null) return;
+    if (adapter == null) return;
     this.adapter = adapter;
     switch (mode) {
       case MODE_SCROLL:
@@ -356,11 +364,11 @@ public class PagerLinearLayout extends LinearLayout {
     for (int i = 0; i < adapter.getItemCount(); i++) {
       View view = adapter.createView(this);
       if (i == 0) {
-        view.setPadding(currentHeight / 20, 0, currentHeight / 40, 0);
+        view.setPadding(currentHeight / 15, 0, currentHeight / 30, 0);
       } else if (i == getChildCount()) {
-        view.setPadding(currentHeight / 40, 0, currentHeight / 20, 0);
+        view.setPadding(currentHeight / 30, 0, currentHeight / 15, 0);
       } else {
-        view.setPadding(currentHeight / 40, 0, currentHeight / 40, 0);
+        view.setPadding(currentHeight / 30, 0, currentHeight / 30, 0);
       }
       addView(view);
       adapter.bindView(view, getChildCount() - 1);
@@ -399,21 +407,13 @@ public class PagerLinearLayout extends LinearLayout {
   }
 
   public void setMinHeight(int minHeight) {
-    if (getHeight() < minHeight) {
-      quickScaleLayout(mode);
-    }
     this.minHeight = minHeight;
-  }
-
-  public int getMaxHeight() {
-    return maxHeight;
+    quickScaleLayout(mode);
   }
 
   public void setMaxHeight(int maxHeight) {
-    if (getHeight() > maxHeight) {
-      quickScaleLayout(mode);
-    }
     this.maxHeight = maxHeight;
+    quickScaleLayout(mode);
   }
 
   public static abstract class Adapter {
