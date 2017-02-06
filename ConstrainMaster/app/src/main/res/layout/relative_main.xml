@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    >
+  <!-- 4:3 ratio -->
+  <ImageView
+      android:id="@+id/listingImageView"
+      android:layout_width="96dp"
+      android:layout_height="72dp"
+      android:scaleType="centerCrop"
+      android:src="@drawable/niconico"
+      />
+
+  <TextView
+      android:id="@+id/titleTextView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="5dp"
+      android:layout_marginLeft="5dp"
+      android:layout_marginRight="5dp"
+      android:layout_toRightOf="@id/listingImageView"
+      android:lines="1"
+      android:text="Hey I am title"
+      android:textSize="20sp"
+      android:textStyle="bold"
+      />
+
+  <TextView
+      android:id="@+id/descriptionTextView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/titleTextView"
+      android:layout_marginLeft="5dp"
+      android:layout_marginRight="5dp"
+      android:layout_toRightOf="@id/listingImageView"
+      android:ellipsize="end"
+      android:lines="2"
+      android:text="Hey I am description. Yes I am description. Believe on me I am description."
+      android:textSize="16sp"
+      />
+
+  <Button
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignLeft="@id/descriptionTextView"
+      android:layout_below="@id/listingImageView"
+      android:text="What! Button, Why "
+      />
+
+</RelativeLayout>
