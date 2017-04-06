@@ -19,6 +19,7 @@ import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
 import static android.opengl.GLES20.GL_FLOAT;
 import static android.opengl.GLES20.GL_FRAGMENT_SHADER;
+import static android.opengl.GLES20.GL_MAX_VERTEX_ATTRIBS;
 import static android.opengl.GLES20.GL_TEXTURE0;
 import static android.opengl.GLES20.GL_TRIANGLES;
 import static android.opengl.GLES20.GL_UNSIGNED_SHORT;
@@ -29,6 +30,7 @@ import static android.opengl.GLES20.glDisableVertexAttribArray;
 import static android.opengl.GLES20.glDrawElements;
 import static android.opengl.GLES20.glEnableVertexAttribArray;
 import static android.opengl.GLES20.glGetAttribLocation;
+import static android.opengl.GLES20.glGetIntegerv;
 import static android.opengl.GLES20.glGetUniformLocation;
 import static android.opengl.GLES20.glUniform1i;
 import static android.opengl.GLES20.glUniformMatrix4fv;
@@ -134,6 +136,10 @@ public class SimpleTextureRenderer implements GLSurfaceView.Renderer {
 
     Matrix.setLookAtM(cameraMatrix, 0, 0, 0, 3, 0, 0, 0, 0, 1, 0);
     Matrix.multiplyMM(mvpMatrix, 0, projectionMatrix, 0, cameraMatrix, 0);
+
+    int[] maxVertexes = new int[1];
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, maxVertexes, 0);
+    System.out.println(maxVertexes[0]);
   }
 
   @Override public void onDrawFrame(GL10 gl) {

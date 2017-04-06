@@ -24,8 +24,9 @@ public class SecondActivity extends AppCompatActivity {
     glSurfaceView = (GLSurfaceView) findViewById(R.id.glSurfaceView);
 
     glSurfaceView.setEGLContextClientVersion(2);
-    //glSurfaceView.setRenderer(new SimpleTextureRenderer(getResources(), R.drawable.niconico));
-    glSurfaceView.setRenderer(new StickerRenderer(getResources()));
+    //glSurfaceView.setEGLContextFactory(new ContextFactory());
+    glSurfaceView.setRenderer(new SimpleTextureRenderer(getResources(), R.drawable.niconico));
+    //glSurfaceView.setRenderer(new StickerRenderer(getResources()));
     glSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
 
     constraintLayout = (GLConstraintLayout) findViewById(R.id.constraintLayout);

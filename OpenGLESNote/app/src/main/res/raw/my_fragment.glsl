@@ -1,3 +1,5 @@
+precision mediump float;
+
 uniform sampler2D s_texture;
 
 varying vec2 v_texCoord;
