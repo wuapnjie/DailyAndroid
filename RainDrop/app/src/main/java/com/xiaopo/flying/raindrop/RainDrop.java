@@ -7,114 +7,95 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import java.util.Random;
 
 /**
  * @author wupanjie
  */
 
 public class RainDrop {
-  private static final PorterDuffXfermode SRC_OVER_MODE =
-      new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER);
-  private static final PorterDuffXfermode SRC_IN_MODE =
-      new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
-  private static final PorterDuffXfermode SCREEN_MODE =
-      new PorterDuffXfermode(PorterDuff.Mode.SCREEN);
+    private static final String TAG = "RainDrop";
+    private static final PorterDuffXfermode SRC_OVER_MODE = new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER);
+    private static final PorterDuffXfermode SRC_IN_MODE = new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
+    private static final PorterDuffXfermode SCREEN_MODE = new PorterDuffXfermode(PorterDuff.Mode.SCREEN);
 
-  private Bitmap rainDropBitmap;
-  private Bitmap bufferBitmap;
+    private Bitmap rainDropBitmap;
+    private Bitmap bufferBitmap;
 
-  private Canvas canvas;
-  private Canvas bufferCanvas;
+    private Canvas canvas;
+    private Canvas bufferCanvas;
 
-  private final int width;
-  private final int height;
-  private float scale;
-  private DropOptions options;
+    private final int width;
+    private final int height;
+    private float scale;
+    private DropOptions options;
 
-  private int dropletsPixelDensity = 1;
+    private int dropletsPixelDensity = 1;
 
-  private final Bitmap dropColor;
-  private final Bitmap dropAlpha;
+    private final Bitmap dropColor;
+    private final Bitmap dropAlpha;
 
-  private Paint bitmapPaint;
-  private Paint clearPaint;
+    private Paint bitmapPaint;
+    private Paint clearPaint;
 
-  public RainDrop(int width, int height, float scale, Bitmap dropColor, Bitmap dropAlpha,
-      DropOptions options) {
-    this.width = width;
-    this.height = height;
-    this.scale = scale;
-    this.dropColor = dropColor;
-    this.dropAlpha = dropAlpha;
-    this.options = options == null ? new DropOptions() : options;
+    private Random random = new Random();
 
-    init();
-  }
+    public RainDrop(int width, int height, float scale, Bitmap dropColor, Bitmap dropAlpha, DropOptions options) {
+        this.width = width;
+        this.height = height;
+        this.scale = scale;
+        this.dropColor = dropColor;
+        this.dropAlpha = dropAlpha;
+        this.options = options == null ? new DropOptions() : options;
 
-  private void init() {
-    this.bitmapPaint = new Paint();
-    bitmapPaint.setFilterBitmap(true);
+        init();
+    }
 
-    this.clearPaint = new Paint();
-    clearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+    private void init() {
+        this.bitmapPaint = new Paint();
+        bitmapPaint.setFilterBitmap(true);
 
-    rainDropBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-    bufferBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-    canvas = new Canvas(rainDropBitmap);
-    bufferCanvas = new Canvas(bufferBitmap);
+        this.clearPaint = new Paint();
+        clearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 
-    draw();
-  }
+        rainDropBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        bufferBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        canvas = new Canvas(rainDropBitmap);
+        bufferCanvas = new Canvas(bufferBitmap);
 
-  private void draw() {
-    canvas.save();
-    canvas.scale(3, 3);
+        draw();
+    }
 
-    bufferCanvas.drawPaint(clearPaint);
+    private void draw() {
+        canvas.save();
+        canvas.translate(600, 800);
 
-    bitmapPaint.setXfermode(SRC_OVER_MODE);
-    bufferCanvas.drawBitmap(dropColor, new Matrix(), bitmapPaint);
+        bufferCanvas.drawPaint(clearPaint);
 
-    bitmapPaint.setXfermode(SCREEN_MODE);
-    bufferCanvas.drawColor(Color.argb(0, 0, 0, 0));
+        bitmapPaint.setXfermode(SRC_OVER_MODE);
+        bufferCanvas.drawBitmap(dropColor, new Matrix(), bitmapPaint);
 
-    bitmapPaint.setXfermode(SRC_OVER_MODE);
-    canvas.drawBitmap(dropAlpha, new Matrix(), bitmapPaint);
+        bitmapPaint.setXfermode(SCREEN_MODE);
+        bufferCanvas.drawColor(Color.argb(0, 0, 0, 128));
 
-    bitmapPaint.setXfermode(SRC_IN_MODE);
-    canvas.drawBitmap(bufferBitmap, new Matrix(), bitmapPaint);
+        bitmapPaint.setXfermode(SRC_OVER_MODE);
+        canvas.drawBitmap(dropAlpha, new Matrix(), bitmapPaint);
 
-    canvas.restore();
+        bitmapPaint.setXfermode(SRC_IN_MODE);
+        canvas.drawBitmap(bufferBitmap, new Matrix(), bitmapPaint);
 
-    //canvas.save();
-    //canvas.translate(600, 400);
-    //
-    //bufferCanvas.drawPaint(clearPaint);
-    //
-    //bitmapPaint.setXfermode(SRC_OVER_MODE);
-    //bufferCanvas.drawBitmap(dropColor, new Matrix(), bitmapPaint);
-    //
-    //bitmapPaint.setXfermode(SCREEN_MODE);
-    //bufferCanvas.drawColor(Color.argb(0, 0, 0, 1));
-    //
-    //bitmapPaint.setXfermode(SRC_OVER_MODE);
-    //canvas.drawBitmap(dropAlpha, new Matrix(), bitmapPaint);
-    //
-    //bitmapPaint.setXfermode(SRC_IN_MODE);
-    //canvas.drawBitmap(bufferBitmap, new Matrix(), bitmapPaint);
-    //
-    //canvas.restore();
-  }
+        canvas.restore();
+    }
 
-  public Bitmap getRainDropBitmap() {
-    return rainDropBitmap;
-  }
+    public Bitmap getRainDropBitmap() {
+        return rainDropBitmap;
+    }
 
-  public int getWidth() {
-    return width;
-  }
+    public int getWidth() {
+        return width;
+    }
 
-  public int getHeight() {
-    return height;
-  }
+    public int getHeight() {
+        return height;
+    }
 }
